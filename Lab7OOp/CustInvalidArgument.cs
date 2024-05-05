@@ -22,7 +22,10 @@ namespace Lab7OOp
         public CustInvalidArgumentException(string message, string place) : base(message)
         {
             Place = place;
+            Message = message;
         }
+
+       
 
 
 

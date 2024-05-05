@@ -101,7 +101,7 @@
             this.allArgsRB.TabIndex = 3;
             this.allArgsRB.Text = "Все аргументы";
             this.allArgsRB.UseVisualStyleBackColor = true;
-            this.allArgsRB.CheckedChanged += new System.EventHandler(this.allArgsRB_CheckedChanged);
+       
             // 
             // twoArgsRb
             // 
@@ -112,7 +112,7 @@
             this.twoArgsRb.TabIndex = 2;
             this.twoArgsRb.Text = "2 аргумента";
             this.twoArgsRb.UseVisualStyleBackColor = true;
-            this.twoArgsRb.CheckedChanged += new System.EventHandler(this.twoArgsRb_CheckedChanged);
+            
             // 
             // oneArgRB
             // 
@@ -123,7 +123,7 @@
             this.oneArgRB.TabIndex = 1;
             this.oneArgRB.Text = "1 аргумент";
             this.oneArgRB.UseVisualStyleBackColor = true;
-            this.oneArgRB.CheckedChanged += new System.EventHandler(this.oneArgRB_CheckedChanged);
+         
             // 
             // withoutArgsRB
             // 
@@ -134,7 +134,7 @@
             this.withoutArgsRB.TabIndex = 0;
             this.withoutArgsRB.Text = "Без аргументов";
             this.withoutArgsRB.UseVisualStyleBackColor = true;
-            this.withoutArgsRB.CheckedChanged += new System.EventHandler(this.withoutArgsRB_CheckedChanged);
+        
             // 
             // NameTb
             // 
@@ -256,7 +256,6 @@
             this.selectLibCB.Size = new System.Drawing.Size(226, 24);
             this.selectLibCB.TabIndex = 16;
             this.selectLibCB.Text = "Не выбрано";
-            this.selectLibCB.SelectedIndexChanged += new System.EventHandler(this.selectLibCB_SelectedIndexChanged);
             // 
             // panelForChoice
             // 
@@ -406,7 +405,7 @@
             this.saveLibBtn.TabIndex = 33;
             this.saveLibBtn.Text = "Сохранить";
             this.saveLibBtn.UseVisualStyleBackColor = true;
-            this.saveLibBtn.Click += new System.EventHandler(this.saveLibBtn_Click);
+          
             // 
             // AddLibBtn
             // 
@@ -416,7 +415,7 @@
             this.AddLibBtn.TabIndex = 34;
             this.AddLibBtn.Text = "Добавить библ.";
             this.AddLibBtn.UseVisualStyleBackColor = true;
-            this.AddLibBtn.Click += new System.EventHandler(this.AddLibBtn_Click);
+           
             // 
             // printDataBtn
             // 
@@ -426,7 +425,7 @@
             this.printDataBtn.TabIndex = 35;
             this.printDataBtn.Text = "Вывести";
             this.printDataBtn.UseVisualStyleBackColor = true;
-            this.printDataBtn.Click += new System.EventHandler(this.printDataBtn_Click);
+     
             // 
             // objectCounterLabel
             // 
@@ -522,7 +521,7 @@
             this.calculate.TabIndex = 50;
             this.calculate.Text = "Произвести замер";
             this.calculate.UseVisualStyleBackColor = true;
-            this.calculate.Click += new System.EventHandler(this.calculate_Click);
+          
             // 
             // Form1
             // 

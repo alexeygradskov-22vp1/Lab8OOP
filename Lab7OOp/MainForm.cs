@@ -11,26 +11,79 @@ using System.Windows.Forms;
 namespace Lab7OOp
 {
 
+    public interface MainFormView {
+         event EventHandler AddLibraryClicked;
+         event EventHandler UpdateLibraryClicked;
+        event EventHandler PrintLibrary;
+         event EventHandler LibCBChanged;
+         event EventHandler withoutArgsChanged;
+         event EventHandler oneArgsChanged;
+         event EventHandler twoArgsChanged;
+         event EventHandler fourArgsChanged;
+        string GetName();
+        string GetQuantity();
+        string GetPhone();
+        string GetAddress();
+        string GetSquare();
+        string GetAvgNumber();
+        string GetRate();
+        void setName(string name);
+        void SetQuantity(string quantity);
+        void SetPhone(string phone);
+        void SetAddress(string address);
+        void SetSquare(string square);
+        void SetAvgNumber(string avgNumber);
+        void SetRate(string rate);
+        string GetUpdName();
+        string GetUpdQuantity();
+        string GetUpdPhone();
+        string GetUpdAddress();
+        string GetUpdSquare();
+        string GetUpdAvgNumber();
+        string GetUpdRate();
+        void setUpdName(string name);
+        void SetUpdQuantity(string quantity);
+        void SetUpdPhone(string phone);
+        void SetUpdAddress(string address);
+        void SetUpdSquare(string square);
+        void SetUpdAvgNumber(string avgNumber);
+        void SetUpdRate(string rate);
+
+        void setCBItems(List<string> items);
+
+        string selLibraryName();
+
+        void setSelLibrary(string item);
+        void showFields(int numberArgs);
+
+        
+        
+
+        (bool, bool, bool, bool, bool, bool, bool) checkedFields();
+    }
+
     /// <summary>
     /// Главный класс форма
     /// </summary>
-    public partial class MainForm : Form
+    public partial class MainForm : Form, MainFormView
     {
 
-        /// <summary>
-        /// Контроллер
-        /// </summary>
-        LibController controller;
-
-        /// <summary>
-        /// Выбранная библиотека
-        /// </summary>
-        private Library _selectedLib=null;
+       
         
         /// <summary>
         /// Число аргументов для создания библиотеки
         /// </summary>
-        private int numbArgs = 0;
+
+
+        public event EventHandler AddLibraryClicked;
+        public event EventHandler UpdateLibraryClicked;
+        public event EventHandler PrintLibrary;
+        public event EventHandler LibCBChanged;
+        public event EventHandler withoutArgsChanged;
+        public event EventHandler oneArgsChanged;
+        public event EventHandler twoArgsChanged;
+        public event EventHandler fourArgsChanged;
+        private readonly LibPresenter _presenter;
 
         /// <summary>
         /// Конструктор
@@ -38,27 +91,26 @@ namespace Lab7OOp
         public MainForm()
         {
             InitializeComponent();
-            controller = new LibController();
+           
             withoutArgsRB.Select();
             selectLibCB.SelectedItem = "Не выбрано";
-            
+            AddLibBtn.Click += (sender, e) => AddLibraryClicked?.Invoke(sender, e);
+            saveLibBtn.Click += (sender, e) => UpdateLibraryClicked?.Invoke(sender, e);
+            printDataBtn.Click += (sender, e) => PrintLibrary?.Invoke(sender, e);
+            selectLibCB.TextChanged += (sender, e) => LibCBChanged?.Invoke(sender, e);
+            withoutArgsRB.CheckedChanged += (sender, e) => withoutArgsChanged?.Invoke(sender, e);
+            oneArgRB.CheckedChanged += (sender, e) => oneArgsChanged?.Invoke(sender, e);
+            twoArgsRb.CheckedChanged += (sender, e) => twoArgsChanged?.Invoke(sender, e);
+            allArgsRB.CheckedChanged += (sender, e) => fourArgsChanged?.Invoke(sender, e);
+            _presenter = new LibPresenter(this);
+
         }
 
-   
 
-        private void withoutArgsRB_CheckedChanged(object sender, EventArgs e)
+
+        public void showFields(int numberArgs)
         {
-            showFields(0);
-            numbArgs = 0;
-        }
-       
-        /// <summary>
-        /// Метод для отображения полей
-        /// </summary>
-        /// <param name="numberArgs">Число аргументов</param> 
-        private void showFields(int numberArgs)
-        {
-            switch(numberArgs)
+            switch (numberArgs)
             {
                 case 0:
                     NameTb.Visible = false;
@@ -68,12 +120,12 @@ namespace Lab7OOp
                     squareTB.Visible = false;
                     avgNumberTb.Visible = false;
                     rateTB.Visible = false;
-                     nameLb.Visible = false;
-                     QuantLb.Visible = false;
-                     phoneLb.Visible = false;
-                     addressLb.Visible = false;
-                     squareLb.Visible = false;
-                     avgNumbLb.Visible = false;
+                    nameLb.Visible = false;
+                    QuantLb.Visible = false;
+                    phoneLb.Visible = false;
+                    addressLb.Visible = false;
+                    squareLb.Visible = false;
+                    avgNumbLb.Visible = false;
                     rateLb.Visible = false;
                     break;
                 case 1:
@@ -127,177 +179,194 @@ namespace Lab7OOp
             }
         }
 
-        private void oneArgRB_CheckedChanged(object sender, EventArgs e)
-        {
-            showFields(1);
-            numbArgs = 1;
-        }
-
-        private void twoArgsRb_CheckedChanged(object sender, EventArgs e)
-        {
-            showFields(2);
-            numbArgs = 2;
-        }
-
-        private void allArgsRB_CheckedChanged(object sender, EventArgs e)
-        {
-            showFields(4);
-            numbArgs = 4;
-        }
-
-        /// <summary>
-        /// Обновление полей при выборе библиотеки
-        /// </summary>
-        private void updateFields()
-        {
-            nameUpdTb.Text = _selectedLib.Name;
-            quantityUpdTb.Text = _selectedLib.QuantityOfBooks.ToString();
-            phoneUpdTB.Text = _selectedLib.Phone;
-            addressUpdTB.Text = _selectedLib.Address;
-            squareUpdTb.Text = _selectedLib.Square.ToString();
-            avgNumberUpdTb.Text= _selectedLib.AvgNumberOfVisitors.ToString();
-            rateUpdTB.Text = _selectedLib.Rate.ToString();
-
-        }
-
-        /// <summary>
-        /// Обновление списка в комбо боксе
-        /// </summary>
-        private void updateList()
-        {
-            selectLibCB.Items.Clear();
-            List<String> libNames = controller.getLibNames();
-            foreach (String libName in libNames)
-            {
-                selectLibCB.Items.Add(libName);
-            }
-        }
-
-        private void selectLibCB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _selectedLib = controller.GetLibrary(selectLibCB.SelectedItem.ToString());
-            updateFields();
-        }
 
         /// <summary>
         /// Метод для обработки нажатия кнопки создания библиотеки
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddLibBtn_Click(object sender, EventArgs e)
-        {
-            if (controller.getLibNames().Contains(NameTb.Text))
-            {
-                MessageBox.Show("Библиотека с таким именем уже существует");
-                return;
-            }
-            string message="";
-            switch (numbArgs)
-            {
-                case 0:
-                    message = controller.add(numbArgs);
-                    break;
-                case 1:
-                    message = controller.add(numbArgs, NameTb.Text);
-                    break;
-                case 2:
-                    message = controller.add(numbArgs, NameTb.Text, quantityTb.Text);
-                    break;
-                case 4:
-                    message = controller.add(numbArgs, NameTb.Text, quantityTb.Text,
-                        phoneTB.Text, addressTB.Text, squareTB.Text,
-                        avgNumberTb.Text, rateTB.Text);
-                    break;
-            }
-            updateList();
-            MessageBox.Show(message);
-        }
+
 
         /// <summary>
         /// Метод для обработки события обновления библиотеки
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void saveLibBtn_Click(object sender, EventArgs e)
-        {
-            if (_selectedLib == null) { MessageBox.Show("Объект не выбран"); return; }
-            string updStatus = controller.update(selectLibCB.SelectedItem.ToString(),
-                nameUpdTb.Text, quantityUpdTb.Text,
-                        phoneUpdTB.Text, addressUpdTB.Text, squareUpdTb.Text,
-                        avgNumberUpdTb.Text, rateUpdTB.Text);
-            MessageBox.Show(updStatus);
-            if (updStatus.Equals("Успешно"))
-            {
-                updateList();
-                _selectedLib = controller.GetLibrary(nameUpdTb.Text);
-                updateFields();
-                selectLibCB.SelectedItem = _selectedLib.Name;
-            }
-        }
+
 
         /// <summary>
         /// Метод для обработки события отображения полей библиотеки
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void printDataBtn_Click(object sender, EventArgs e)
-        {
-            if (_selectedLib == null) { MessageBox.Show("Объект не выбран"); return; }
 
-            string result  = fetchData();
-            MessageBox.Show(result.Equals("")?"Выберите поля для вывода":result);
+
+        public string GetName()
+        {
+            return NameTb.Text;
         }
 
-        /// <summary>
-        /// Метод для создания строки вывода полей
-        /// </summary>
-        /// <returns></returns>
-        private string fetchData()
+        public string GetQuantity()
         {
-            StringBuilder result = new StringBuilder("");
-         
-            if (nameOutCB.Checked)
-            {
-                result.AppendLine($"Название: {_selectedLib.Name}");
-            }
-            if (quantityOutCB.Checked)
-            {
-                result.AppendLine($"Библиотечный фонд: {_selectedLib.QuantityOfBooks.ToString()}");
-                
-            }
-            if (phoneOutCB.Checked)
-            {
-                result.AppendLine($"Номер телефона: {_selectedLib.Phone}");
-            }
-            if (addressOutCB.Checked)
-            {
-                result.AppendLine($"Адрес: {_selectedLib.Address}");
-            }
-            if (squareOutCB.Checked)
-            {
-                result.AppendLine($"Площадь: {_selectedLib.Square.ToString()}");
-            }
-            if (avgNumberOutCB.Checked)
-            {
-                result.AppendLine($"Среднее число посетителей: {_selectedLib.AvgNumberOfVisitors.ToString()}");
-            }
-            if (rateOutCB.Checked)
-            {
-                result.AppendLine($"Рейтинг: {_selectedLib.Rate.ToString()}");
-            }
-            return result.ToString();
-
+            return quantityTb.Text;
         }
 
-        /// <summary>
-        /// Метод для обработки события отображения формы замера результатов
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void calculate_Click(object sender, EventArgs e)
+        public string GetPhone()
         {
-            Test test = new Test();
-            test.ShowDialog();
+            return phoneTB.Text;
+        }
+
+        public string GetAddress()
+        {
+            return addressTB.Text;
+        }
+
+        public string GetSquare()
+        {
+            return squareTB.Text;
+        }
+
+        public string GetAvgNumber()
+        {
+            return avgNumberTb.Text;
+        }
+
+        public string GetRate()
+        {
+            return rateTB.Text;
+        }
+
+        public void setName(string name)
+        {
+            nameUpdTb.Text = name;
+        }
+
+        public void SetQuantity(string quantity)
+        {
+            quantityUpdTb.Text = quantity;
+        }
+
+        public void SetPhone(string phone)
+        {
+            phoneUpdTB.Text = phone;
+        }
+
+        public void SetAddress(string address)
+        {
+            addressUpdTB.Text = address;
+        }
+
+        public void SetSquare(string square)
+        {
+            squareUpdTb.Text = square;
+        }
+
+        public void SetAvgNumber(string avgNumber)
+        {
+            avgNumberUpdTb.Text = avgNumber;
+        }
+
+        public void SetRate(string rate)
+        {
+            rateUpdTB.Text = rate;
+        }
+
+        public void setCBItems(List<string> items)
+        {
+            selectLibCB.Items.Clear();
+            foreach (string item in items)
+            {
+                selectLibCB.Items.Add(item);
+            }
+            
+        }
+
+        public string selLibraryName()
+        {
+            return selectLibCB.SelectedItem.ToString();
+        }
+
+        public string GetUpdName()
+        {
+            return nameUpdTb.Text;
+        }
+
+        public string GetUpdQuantity()
+        {
+            return quantityUpdTb.Text;
+        }
+
+        public string GetUpdPhone()
+        {
+            return phoneUpdTB.Text;
+        }
+
+        public string GetUpdAddress()
+        {
+            return addressUpdTB.Text;
+        }
+
+        public string GetUpdSquare()
+        {
+            return squareUpdTb.Text;
+        }
+
+        public string GetUpdAvgNumber()
+        {
+            return avgNumberUpdTb.Text;
+        }
+
+        public string GetUpdRate()
+        {
+            return rateUpdTB.Text;
+        }
+
+        public void setUpdName(string name)
+        {
+            nameUpdTb.Text = name;
+        }
+
+        public void SetUpdQuantity(string quantity)
+        {
+            quantityUpdTb.Text=quantity;
+        }
+
+        public void SetUpdPhone(string phone)
+        {
+            phoneUpdTB.Text = phone;
+        }
+
+        public void SetUpdAddress(string address)
+        {
+            addressUpdTB.Text=address;
+        }
+
+        public void SetUpdSquare(string square)
+        {
+            squareUpdTb.Text=square;
+        }
+
+        public void SetUpdAvgNumber(string avgNumber)
+        {
+            avgNumberUpdTb.Text=avgNumber;
+        }
+
+        public void SetUpdRate(string rate)
+        {
+            rateUpdTB.Text = rate;
+        }
+
+        public void setSelLibrary(string item)
+        {
+            selectLibCB.SelectedItem = item;
+        }
+
+        public (bool, bool, bool, bool, bool, bool, bool) checkedFields()
+        {
+            return (nameOutCB.Checked, quantityOutCB.Checked, 
+                phoneOutCB.Checked, addressOutCB.Checked, 
+                squareOutCB.Checked, avgNumberOutCB.Checked,
+                rateOutCB.Checked);
         }
     }
 }

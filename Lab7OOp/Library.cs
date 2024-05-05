@@ -8,7 +8,7 @@ namespace Lab7OOp
 {
     class Library
     {
-        private static int _increment = 0;
+
 
         private string _id;
 
